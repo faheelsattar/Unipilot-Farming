@@ -1,0 +1,29 @@
+specVersion: 0.0.1
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: UnipilotFarm
+    network: rinkeby
+    source:
+      address: "0xCB3a4b2aBbB1F36489C68E6ABc8CB751f911c116"
+      abi: UnipilotFarm
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Deposit
+        - WithdrawNFT
+        - WithdrawReward
+      abis:
+        - name: UnipilotFarm
+          file: ./abis/UnipilotFarm.json
+      eventHandlers:
+        - event: Deposit(address,uint256,uint256,uint256,uint256)
+          handler: handleDeposit
+        - event: WithdrawNFT(address,address,uint256)
+          handler: handleWithdrawNFT
+        - event: WithdrawReward(address,uint256,uint256,uint256,uint256,uint256)
+          handler: handleWithdrawReward
+      file: ./src/mapping.ts
