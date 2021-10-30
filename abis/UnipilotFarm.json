@@ -1,5 +1,11 @@
 [
-  { "inputs": [], "stateMutability": "nonpayable", "type": "constructor" },
+  {
+    "inputs": [
+      { "internalType": "address[]", "name": "pools", "type": "address[]" }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
   {
     "anonymous": false,
     "inputs": [
@@ -31,6 +37,18 @@
         "indexed": false,
         "internalType": "uint256",
         "name": "globalReward",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "rewardMultiplier",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "rewardPerBlock",
         "type": "uint256"
       }
     ],
@@ -100,10 +118,33 @@
         "internalType": "uint256",
         "name": "totalSupply",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "lastRewardTransferred",
+        "type": "uint256"
       }
     ],
     "name": "WithdrawReward",
     "type": "event"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "poolAddress", "type": "address" },
+      { "internalType": "uint256", "name": "tokenId", "type": "uint256" }
+    ],
+    "name": "currentAltReward",
+    "outputs": [
+      { "internalType": "uint256", "name": "altReward", "type": "uint256" },
+      {
+        "internalType": "uint256",
+        "name": "altGlobalReward",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
   },
   {
     "inputs": [
@@ -120,11 +161,7 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "unipoolAddress",
-        "type": "address"
-      },
+      { "internalType": "address", "name": "poolAddress", "type": "address" },
       { "internalType": "uint256", "name": "tokenId", "type": "uint256" }
     ],
     "name": "depositNFT",
@@ -147,6 +184,66 @@
       { "internalType": "address", "name": "", "type": "address" }
     ],
     "name": "farmingActive",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "poolAddress", "type": "address" }
+    ],
+    "name": "getAltGlobalReward",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "altGlobalReward",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "poolAddress", "type": "address" }
+    ],
+    "name": "getGlobalReward",
+    "outputs": [
+      { "internalType": "uint256", "name": "globalReward", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "globalFarmingReward",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "poolAddress", "type": "address" }
+    ],
+    "name": "insertPool",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "newContract", "type": "address" }
+    ],
+    "name": "migrateFundData",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "tokenId", "type": "uint256" }
+    ],
+    "name": "nftStatus",
     "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
     "stateMutability": "view",
     "type": "function"
@@ -179,13 +276,105 @@
         "internalType": "uint256",
         "name": "rewardMultiplier",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "rewardPerBlock",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "altGlobalReward",
+        "type": "uint256"
+      },
+      { "internalType": "address", "name": "altToken", "type": "address" },
+      { "internalType": "bool", "name": "isAltActive", "type": "bool" },
+      {
+        "internalType": "uint256",
+        "name": "altRewardMultiplier",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "altRewardPerBlock",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "lastAltRewardBlock",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "name": "poolWhitelist",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "poolAddress", "type": "address" }
+    ],
+    "name": "toggleActiveAlt",
+    "outputs": [
+      { "internalType": "bool", "name": "currentStatus", "type": "bool" }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "tokenId", "type": "uint256" }
+    ],
+    "name": "toggleBooster",
+    "outputs": [
+      { "internalType": "bool", "name": "currentStatus", "type": "bool" }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "userAddress", "type": "address" },
+      { "internalType": "address", "name": "poolAddress", "type": "address" }
+    ],
+    "name": "totalUserNftWRTPool",
+    "outputs": [
+      { "internalType": "uint256", "name": "tokenCount", "type": "uint256" },
+      { "internalType": "uint256[]", "name": "tokenIds", "type": "uint256[]" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "poolAddress", "type": "address" },
+      { "internalType": "uint256", "name": "value", "type": "uint256" }
+    ],
+    "name": "updateAltMultiplier",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "poolAddress", "type": "address" },
+      { "internalType": "uint256", "name": "value", "type": "uint256" }
+    ],
+    "name": "updateAltPerBlock",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "poolAddress", "type": "address" },
+      { "internalType": "uint256", "name": "value", "type": "uint256" }
+    ],
     "name": "updateMultiplier",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "nonpayable",
@@ -193,11 +382,11 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
+      { "internalType": "address", "name": "poolAddress", "type": "address" },
       { "internalType": "uint256", "name": "value", "type": "uint256" }
     ],
     "name": "updatePilotPerBlock",
-    "outputs": [],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -209,8 +398,21 @@
       { "internalType": "address", "name": "poolAddress", "type": "address" },
       { "internalType": "uint256", "name": "liquidity", "type": "uint256" },
       { "internalType": "address", "name": "userAddress", "type": "address" },
-      { "internalType": "uint256", "name": "reward", "type": "uint256" }
+      { "internalType": "uint256", "name": "reward", "type": "uint256" },
+      { "internalType": "uint256", "name": "altReward", "type": "uint256" },
+      { "internalType": "bool", "name": "booster", "type": "bool" }
     ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "", "type": "address" },
+      { "internalType": "address", "name": "", "type": "address" },
+      { "internalType": "uint256", "name": "", "type": "uint256" }
+    ],
+    "name": "userToPoolToTokenIds",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },

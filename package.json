@@ -1,16 +1,16 @@
 {
-  "name": "UnipilotFarming",
+  "name": "unipilot-farm",
   "license": "UNLICENSED",
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ faheelsattar/UnipilotFarming",
-    "create-local": "graph create --node http://localhost:8020/ faheelsattar/UnipilotFarming",
-    "remove-local": "graph remove --node http://localhost:8020/ faheelsattar/UnipilotFarming",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 faheelsattar/UnipilotFarming"
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ faheelsattar/unipilot-farm",
+    "create-local": "graph create --node http://localhost:8020/ faheelsattar/unipilot-farm",
+    "remove-local": "graph remove --node http://localhost:8020/ faheelsattar/unipilot-farm",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 faheelsattar/unipilot-farm"
   },
   "dependencies": {
-    "@graphprotocol/graph-cli": "0.22.1",
-    "@graphprotocol/graph-ts": "0.22.1"
+    "@graphprotocol/graph-cli": "0.22.0",
+    "@graphprotocol/graph-ts": "0.22.0"
   }
 }
