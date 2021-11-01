@@ -15,66 +15,16 @@ import {
   fetchTokenSymbol,
   fetchTokenTotalSupply,
 } from "./utils/token";
-import { ONE_BD, USDT, WETH } from "./utils/constants";
+import { ONE_BD, USDC_WETH_03_ADDRESS, USDT, WETH } from "./utils/constants";
 import {
   findWethPerTokenV3,
   getEthPriceInUSD,
   sqrtPriceX96ToTokenPrices,
 } from "./utils/pricing";
-
-export function initPool(event: Swap): void {
-  let pool = Pool.load("0xe63c7fbc01df71d356ee585b1ba0b41183da67b4");
-  if (pool) {
-    return;
-  }
-  pool = new Pool("0xe63c7fbc01df71d356ee585b1ba0b41183da67b4");
-  let token0 = Token.load(WETH);
-  if (!token0) {
-    token0 = new Token(WETH);
-    token0.name = fetchTokenName(Address.fromString(WETH));
-    token0.totalSupply = fetchTokenTotalSupply(Address.fromString(WETH));
-    token0.symbol = fetchTokenSymbol(Address.fromString(WETH));
-  }
-  token0.decimals = fetchTokenDecimals(Address.fromString(WETH));
-  let token1 = Token.load(USDT);
-  if (!token1) {
-    token1 = new Token(USDT);
-    token1.name = fetchTokenName(Address.fromString(USDT));
-    token1.totalSupply = fetchTokenTotalSupply(Address.fromString(USDT));
-    token1.symbol = fetchTokenSymbol(Address.fromString(USDT));
-  }
-  token1.decimals = fetchTokenDecimals(Address.fromString(USDT));
-
-  let prices = sqrtPriceX96ToTokenPrices(
-    event.params.sqrtPriceX96,
-    token0 as Token,
-    token1 as Token
-  );
-  token0.drivedETH = BigDecimal.fromString("0");
-  token0.drivedUSD = BigDecimal.fromString("0");
-  token0.save();
-  token1.drivedETH = BigDecimal.fromString("0");
-  token1.drivedUSD = BigDecimal.fromString("0");
-  token1.save();
-
-  pool.sqrtPrice = event.params.sqrtPriceX96;
-  pool.reserve0 = ONE_BD;
-  pool.reserve1 = ONE_BD;
-  pool.token0Price = prices[0];
-  pool.token1Price = prices[1];
-  pool.token0 = WETH;
-  pool.token1 = USDT;
-  pool.tvl = BigDecimal.fromString("0");
-  pool.nftCount = BigInt.fromI32(0);
-  pool.multiplier = BigInt.fromI32(0);
-  pool.apr = BigInt.fromI32(0);
-  pool.save();
-}
+import { initPool } from "./common";
 
 export function handleSwap(event: Swap): void {
-  if (
-    event.address.toHexString() == "0xe63c7fbc01df71d356ee585b1ba0b41183da67b4"
-  ) {
+  if (event.address.toHexString() == USDC_WETH_03_ADDRESS) {
     initPool(event);
   }
   let pool = Pool.load(event.address.toHexString());
@@ -113,9 +63,9 @@ export function handleSwap(event: Swap): void {
 }
 
 export function handleDeposit(event: Deposit): void {
-  let protocol = Protocol.load(event.transaction.from.toHexString());
+  let protocol = Protocol.load("1");
   if (!protocol) {
-    protocol = new Protocol(event.transaction.from.toHexString());
+    protocol = new Protocol("1");
     protocol.rewardDistributed = BigInt.fromI32(0);
   }
   protocol.totalNftLocked = protocol.totalNftLocked.plus(BigInt.fromI32(1));
@@ -179,7 +129,11 @@ export function handleDeposit(event: Deposit): void {
   token1.drivedETH = findWethPerTokenV3(token1.id);
   token1.drivedUSD = token1.drivedETH.times(bundle.ethPriceUSD);
   token1.save();
-  const updatedAmount = calculateAmounts(event, poolArr);
+  const updatedAmount = calculateAmounts(
+    event.params.pool,
+    event.params.totalSupply,
+    poolArr
+  );
   log.debug("updated amount {}", [updatedAmount.toString()]);
   protocol.tvl = protocol.tvl.plus(updatedAmount);
   protocol.save();
@@ -209,6 +163,45 @@ export function handleDeposit(event: Deposit): void {
   }
 }
 
-export function handleWithdrawNFT(event: WithdrawNFT): void {}
+export function handleWithdrawNFT(event: WithdrawNFT): void {
+  let protocol = Protocol.load("1");
+  if (!protocol) return;
+  if (protocol.totalNftLocked > BigInt.fromI32(0)) {
+    protocol.totalNftLocked = protocol.totalNftLocked.minus(BigInt.fromI32(1));
+  }
+  let pool = Pool.load(event.params.pool.toHexString());
+  if (!pool) return;
+  const poolArr = getPoolDetails(event.params.pool);
+  if (poolArr.length === 0) return;
+  const updatedAmount = calculateAmounts(
+    event.params.pool,
+    event.params.totalSupply,
+    poolArr
+  );
+  protocol.tvl = protocol.tvl.minus(updatedAmount);
+  protocol.save();
+  pool.tvl = updatedAmount;
+  pool.save();
+  let user = User.load(event.transaction.from.toHexString());
+  if (!user) return;
+  if (user.nftCount > BigInt.fromI32(0)) {
+    user.nftCount = user.nftCount.minus(BigInt.fromI32(1));
+  }
+}
 
-export function handleWithdrawReward(event: WithdrawReward): void {}
+export function handleWithdrawReward(event: WithdrawReward): void {
+  let protocol = Protocol.load("1");
+  if (!protocol) return;
+  protocol.reward = event.params.globalReward;
+  protocol.save();
+  let pool = Pool.load(event.params.pool.toHexString());
+  if (!pool) return;
+  pool.reward = pool.reward.plus(event.params.reward);
+  pool.save();
+  let user = User.load(event.transaction.from.toHexString());
+  if (!user) return;
+  user.reward = user.reward.plus(event.params.reward);
+  let nft = Nft.load(event.params.nftId.toHexString());
+  if (!nft) return;
+  nft.reward = nft.reward.plus(event.params.reward);
+}

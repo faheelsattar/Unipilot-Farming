@@ -79,6 +79,12 @@
         "internalType": "uint256",
         "name": "tokenId",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "totalSupply",
+        "type": "uint256"
       }
     ],
     "name": "WithdrawNFT",
@@ -258,25 +264,26 @@
         "internalType": "address",
         "name": "poolAddress",
         "type": "address"
-      }
-    ],
-    "name": "getAltGlobalReward",
-    "outputs": [
+      },
       {
         "internalType": "uint256",
-        "name": "altGlobalReward",
+        "name": "blockDifference",
         "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
+      },
       {
-        "internalType": "address",
-        "name": "poolAddress",
-        "type": "address"
+        "internalType": "uint256",
+        "name": "reward",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "multiplier",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_globalReward",
+        "type": "uint256"
       }
     ],
     "name": "getGlobalReward",
@@ -450,6 +457,11 @@
       {
         "internalType": "uint256",
         "name": "lastAltRewardBlock",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "startBlock",
         "type": "uint256"
       }
     ],

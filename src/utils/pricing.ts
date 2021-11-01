@@ -1,7 +1,6 @@
 import { Address, BigDecimal, BigInt, log } from "@graphprotocol/graph-ts";
 import { Pool, Token } from "../../generated/schema";
 import { getPoolDetails, getUniswapPool } from "../helper";
-import { initPool } from "../mapping";
 import { exponentToBigDecimal, safeDiv } from "../utils/index";
 import {
   ADDRESS_ZERO,

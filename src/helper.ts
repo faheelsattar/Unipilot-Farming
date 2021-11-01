@@ -5,7 +5,12 @@ import { sqrtPriceX96ToTokenPrices } from "./utils/pricing";
 import { Token } from "../generated/schema";
 import { Deposit } from "../generated/UnipilotFarm/UnipilotFarm";
 import { UniswapV3Factory } from "../generated/UniswapV3Pair/UniswapV3Factory";
-import { ADDRESS_ZERO, UNISWAP_V3_FACTORY } from "./utils/constants";
+import {
+  ADDRESS_ZERO,
+  ULM_ADDRESS,
+  ULM_STATE_ADDRESS,
+  UNISWAP_V3_FACTORY,
+} from "./utils/constants";
 import {
   fetchTokenDecimals,
   fetchTokenName,
@@ -13,9 +18,7 @@ import {
   fetchTokenTotalSupply,
 } from "./utils/token";
 export const getPoolDetails = (pool: Address): string[] => {
-  let contract = ULMState.bind(
-    Address.fromString("0x52b29e16e509e673cbb8793687c92593266d3f4e")
-  );
+  let contract = ULMState.bind(Address.fromString(ULM_STATE_ADDRESS));
   let data = contract.try_getPoolDetails(pool);
   if (data.reverted) {
     return [];
@@ -44,13 +47,12 @@ export const getPoolDetails = (pool: Address): string[] => {
 // };
 
 export const calculateAmounts = (
-  event: Deposit,
+  pool: Address,
+  totalSupply: BigInt,
   poolArr: string[]
 ): BigDecimal => {
-  let contract = UniswapLiquidityManager.bind(
-    Address.fromString("0xd918fd37c24c8f8e75408753afc1c0da91836204")
-  );
-  let totalAmount = contract.try_getTotalAmounts(event.params.pool);
+  let contract = UniswapLiquidityManager.bind(Address.fromString(ULM_ADDRESS));
+  let totalAmount = contract.try_getTotalAmounts(pool);
   log.debug("total amount {}", [totalAmount.value.value2.toString()]);
   if (totalAmount.reverted) {
     return BigDecimal.fromString("0");
@@ -83,7 +85,7 @@ export const calculateAmounts = (
     amount2.toString(),
   ]);
   let totalLiquidity = totalAmount.value.value4.toBigDecimal();
-  let liquidity = event.params.totalSupply.toBigDecimal();
+  let liquidity = totalSupply.toBigDecimal();
   let ratioLiquidity: BigDecimal = liquidity.div(totalLiquidity);
   log.debug("totalLiquidity {} liquidity {} ratioLiquidity {}", [
     totalLiquidity.toString(),

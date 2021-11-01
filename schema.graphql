@@ -3,6 +3,7 @@ type Protocol @entity {
   tvl: BigDecimal!
   rewardDistributed: BigInt!
   totalNftLocked: BigInt!
+  reward: BigInt!
 }
 
 type Bundle @entity {
@@ -24,6 +25,7 @@ type Pool @entity {
   token0: Token!
   token1: Token!
   nftCount: BigInt!
+  reward: BigInt!
   nft: [Nft!]! @derivedFrom(field: "pool")
 }
 
@@ -31,12 +33,14 @@ type User @entity {
   id: ID!
   address: String!
   nftCount: BigInt!
+  reward: BigInt!
   nft: [Nft!]! @derivedFrom(field: "user")
 }
 
 type Nft @entity {
   id: ID!
   tokenId: BigInt!
+  reward: BigInt!
   user: User!
   pool: Pool!
 }

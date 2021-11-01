@@ -20,6 +20,7 @@ export class Protocol extends Entity {
     this.set("tvl", Value.fromBigDecimal(BigDecimal.zero()));
     this.set("rewardDistributed", Value.fromBigInt(BigInt.zero()));
     this.set("totalNftLocked", Value.fromBigInt(BigInt.zero()));
+    this.set("reward", Value.fromBigInt(BigInt.zero()));
   }
 
   save(): void {
@@ -73,6 +74,15 @@ export class Protocol extends Entity {
 
   set totalNftLocked(value: BigInt) {
     this.set("totalNftLocked", Value.fromBigInt(value));
+  }
+
+  get reward(): BigInt {
+    let value = this.get("reward");
+    return value!.toBigInt();
+  }
+
+  set reward(value: BigInt) {
+    this.set("reward", Value.fromBigInt(value));
   }
 }
 
@@ -137,6 +147,7 @@ export class Pool extends Entity {
     this.set("token0", Value.fromString(""));
     this.set("token1", Value.fromString(""));
     this.set("nftCount", Value.fromBigInt(BigInt.zero()));
+    this.set("reward", Value.fromBigInt(BigInt.zero()));
   }
 
   save(): void {
@@ -273,6 +284,15 @@ export class Pool extends Entity {
     this.set("nftCount", Value.fromBigInt(value));
   }
 
+  get reward(): BigInt {
+    let value = this.get("reward");
+    return value!.toBigInt();
+  }
+
+  set reward(value: BigInt) {
+    this.set("reward", Value.fromBigInt(value));
+  }
+
   get nft(): Array<string> {
     let value = this.get("nft");
     return value!.toStringArray();
@@ -290,6 +310,7 @@ export class User extends Entity {
 
     this.set("address", Value.fromString(""));
     this.set("nftCount", Value.fromBigInt(BigInt.zero()));
+    this.set("reward", Value.fromBigInt(BigInt.zero()));
   }
 
   save(): void {
@@ -336,6 +357,15 @@ export class User extends Entity {
     this.set("nftCount", Value.fromBigInt(value));
   }
 
+  get reward(): BigInt {
+    let value = this.get("reward");
+    return value!.toBigInt();
+  }
+
+  set reward(value: BigInt) {
+    this.set("reward", Value.fromBigInt(value));
+  }
+
   get nft(): Array<string> {
     let value = this.get("nft");
     return value!.toStringArray();
@@ -352,6 +382,7 @@ export class Nft extends Entity {
     this.set("id", Value.fromString(id));
 
     this.set("tokenId", Value.fromBigInt(BigInt.zero()));
+    this.set("reward", Value.fromBigInt(BigInt.zero()));
     this.set("user", Value.fromString(""));
     this.set("pool", Value.fromString(""));
   }
@@ -389,6 +420,15 @@ export class Nft extends Entity {
 
   set tokenId(value: BigInt) {
     this.set("tokenId", Value.fromBigInt(value));
+  }
+
+  get reward(): BigInt {
+    let value = this.get("reward");
+    return value!.toBigInt();
+  }
+
+  set reward(value: BigInt) {
+    this.set("reward", Value.fromBigInt(value));
   }
 
   get user(): string {

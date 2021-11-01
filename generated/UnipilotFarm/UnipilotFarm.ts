@@ -76,6 +76,10 @@ export class WithdrawNFT__Params {
   get tokenId(): BigInt {
     return this._event.parameters[2].value.toBigInt();
   }
+
+  get totalSupply(): BigInt {
+    return this._event.parameters[3].value.toBigInt();
+  }
 }
 
 export class WithdrawReward extends ethereum.Event {
@@ -167,6 +171,7 @@ export class UnipilotFarm__poolInfoResult {
   value9: BigInt;
   value10: BigInt;
   value11: BigInt;
+  value12: BigInt;
 
   constructor(
     value0: Address,
@@ -180,7 +185,8 @@ export class UnipilotFarm__poolInfoResult {
     value8: boolean,
     value9: BigInt,
     value10: BigInt,
-    value11: BigInt
+    value11: BigInt,
+    value12: BigInt
   ) {
     this.value0 = value0;
     this.value1 = value1;
@@ -194,6 +200,7 @@ export class UnipilotFarm__poolInfoResult {
     this.value9 = value9;
     this.value10 = value10;
     this.value11 = value11;
+    this.value12 = value12;
   }
 
   toMap(): TypedMap<string, ethereum.Value> {
@@ -210,6 +217,7 @@ export class UnipilotFarm__poolInfoResult {
     map.set("value9", ethereum.Value.fromUnsignedBigInt(this.value9));
     map.set("value10", ethereum.Value.fromUnsignedBigInt(this.value10));
     map.set("value11", ethereum.Value.fromUnsignedBigInt(this.value11));
+    map.set("value12", ethereum.Value.fromUnsignedBigInt(this.value12));
     return map;
   }
 }
@@ -420,44 +428,45 @@ export class UnipilotFarm extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
-  getAltGlobalReward(poolAddress: Address): BigInt {
+  getGlobalReward(
+    poolAddress: Address,
+    blockDifference: BigInt,
+    reward: BigInt,
+    multiplier: BigInt,
+    _globalReward: BigInt
+  ): BigInt {
     let result = super.call(
-      "getAltGlobalReward",
-      "getAltGlobalReward(address):(uint256)",
-      [ethereum.Value.fromAddress(poolAddress)]
+      "getGlobalReward",
+      "getGlobalReward(address,uint256,uint256,uint256,uint256):(uint256)",
+      [
+        ethereum.Value.fromAddress(poolAddress),
+        ethereum.Value.fromUnsignedBigInt(blockDifference),
+        ethereum.Value.fromUnsignedBigInt(reward),
+        ethereum.Value.fromUnsignedBigInt(multiplier),
+        ethereum.Value.fromUnsignedBigInt(_globalReward)
+      ]
     );
 
     return result[0].toBigInt();
   }
 
-  try_getAltGlobalReward(poolAddress: Address): ethereum.CallResult<BigInt> {
-    let result = super.tryCall(
-      "getAltGlobalReward",
-      "getAltGlobalReward(address):(uint256)",
-      [ethereum.Value.fromAddress(poolAddress)]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
-  getGlobalReward(poolAddress: Address): BigInt {
-    let result = super.call(
-      "getGlobalReward",
-      "getGlobalReward(address):(uint256)",
-      [ethereum.Value.fromAddress(poolAddress)]
-    );
-
-    return result[0].toBigInt();
-  }
-
-  try_getGlobalReward(poolAddress: Address): ethereum.CallResult<BigInt> {
+  try_getGlobalReward(
+    poolAddress: Address,
+    blockDifference: BigInt,
+    reward: BigInt,
+    multiplier: BigInt,
+    _globalReward: BigInt
+  ): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
       "getGlobalReward",
-      "getGlobalReward(address):(uint256)",
-      [ethereum.Value.fromAddress(poolAddress)]
+      "getGlobalReward(address,uint256,uint256,uint256,uint256):(uint256)",
+      [
+        ethereum.Value.fromAddress(poolAddress),
+        ethereum.Value.fromUnsignedBigInt(blockDifference),
+        ethereum.Value.fromUnsignedBigInt(reward),
+        ethereum.Value.fromUnsignedBigInt(multiplier),
+        ethereum.Value.fromUnsignedBigInt(_globalReward)
+      ]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -554,7 +563,7 @@ export class UnipilotFarm extends ethereum.SmartContract {
   poolInfo(param0: Address): UnipilotFarm__poolInfoResult {
     let result = super.call(
       "poolInfo",
-      "poolInfo(address):(address,uint256,uint256,uint256,uint256,uint256,uint256,address,bool,uint256,uint256,uint256)",
+      "poolInfo(address):(address,uint256,uint256,uint256,uint256,uint256,uint256,address,bool,uint256,uint256,uint256,uint256)",
       [ethereum.Value.fromAddress(param0)]
     );
 
@@ -570,7 +579,8 @@ export class UnipilotFarm extends ethereum.SmartContract {
       result[8].toBoolean(),
       result[9].toBigInt(),
       result[10].toBigInt(),
-      result[11].toBigInt()
+      result[11].toBigInt(),
+      result[12].toBigInt()
     );
   }
 
@@ -579,7 +589,7 @@ export class UnipilotFarm extends ethereum.SmartContract {
   ): ethereum.CallResult<UnipilotFarm__poolInfoResult> {
     let result = super.tryCall(
       "poolInfo",
-      "poolInfo(address):(address,uint256,uint256,uint256,uint256,uint256,uint256,address,bool,uint256,uint256,uint256)",
+      "poolInfo(address):(address,uint256,uint256,uint256,uint256,uint256,uint256,address,bool,uint256,uint256,uint256,uint256)",
       [ethereum.Value.fromAddress(param0)]
     );
     if (result.reverted) {
@@ -599,7 +609,8 @@ export class UnipilotFarm extends ethereum.SmartContract {
         value[8].toBoolean(),
         value[9].toBigInt(),
         value[10].toBigInt(),
-        value[11].toBigInt()
+        value[11].toBigInt(),
+        value[12].toBigInt()
       )
     );
   }
