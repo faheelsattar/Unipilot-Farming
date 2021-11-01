@@ -144,6 +144,7 @@ export function handleDeposit(event: Deposit): void {
   pool.pilotPerBlock = event.params.rewardPerBlock;
   pool.apr = BigInt.fromI32(0);
   pool.nftCount = pool.nftCount.plus(BigInt.fromI32(1));
+  pool.fee = BigInt.fromString(poolArr[3]);
   pool.save();
   //we will need to change this and get it from event Params
   let user = User.load(event.transaction.from.toHexString());

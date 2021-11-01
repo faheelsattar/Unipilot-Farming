@@ -148,6 +148,7 @@ export class Pool extends Entity {
     this.set("token1", Value.fromString(""));
     this.set("nftCount", Value.fromBigInt(BigInt.zero()));
     this.set("reward", Value.fromBigInt(BigInt.zero()));
+    this.set("fee", Value.fromBigInt(BigInt.zero()));
   }
 
   save(): void {
@@ -291,6 +292,15 @@ export class Pool extends Entity {
 
   set reward(value: BigInt) {
     this.set("reward", Value.fromBigInt(value));
+  }
+
+  get fee(): BigInt {
+    let value = this.get("fee");
+    return value!.toBigInt();
+  }
+
+  set fee(value: BigInt) {
+    this.set("fee", Value.fromBigInt(value));
   }
 
   get nft(): Array<string> {

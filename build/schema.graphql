@@ -26,6 +26,7 @@ type Pool @entity {
   token1: Token!
   nftCount: BigInt!
   reward: BigInt!
+  fee: BigInt!
   nft: [Nft!]! @derivedFrom(field: "pool")
 }
 

@@ -25,8 +25,9 @@ export const getPoolDetails = (pool: Address): string[] => {
   }
   let token0 = data.value.value0.toHexString();
   let token1 = data.value.value1.toHexString();
+  let fee = BigInt.fromI32(data.value.value2).toString();
   let sqrtPriceX96 = data.value.value5.toString();
-  return [token0, token1, sqrtPriceX96];
+  return [token0, token1, sqrtPriceX96, fee];
 };
 
 // export const getDollarPrice = (
