@@ -82,17 +82,17 @@ export const calculateAmounts = (
     amount1.toString(),
     amount2.toString(),
   ]);
-  let totalLiquidity = totalAmount.value.value4;
-  let liquidity = event.params.totalSupply;
-  let ratioLiquidity = liquidity.div(totalLiquidity);
+  let totalLiquidity = totalAmount.value.value4.toBigDecimal();
+  let liquidity = event.params.totalSupply.toBigDecimal();
+  let ratioLiquidity: BigDecimal = liquidity.div(totalLiquidity);
   log.debug("totalLiquidity {} liquidity {} ratioLiquidity {}", [
     totalLiquidity.toString(),
     liquidity.toString(),
     ratioLiquidity.toString(),
   ]);
-  amount1 = amount1.times(ratioLiquidity.toBigDecimal());
-  amount2 = amount2.times(ratioLiquidity.toBigDecimal());
-  log.debug("3rd case Amiunt 1 {}, Amount 2 {}", [
+  amount1 = amount1.times(ratioLiquidity);
+  amount2 = amount2.times(ratioLiquidity);
+  log.debug("3rd cas Amiunt 1 {}, Amount 2 {}", [
     amount1.toString(),
     amount2.toString(),
   ]);
