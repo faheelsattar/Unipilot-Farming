@@ -30,23 +30,6 @@ export const getPoolDetails = (pool: Address): string[] => {
   return [token0, token1, sqrtPriceX96, fee];
 };
 
-// export const getDollarPrice = (
-//   sqrtPriceX96: BigInt,
-//   token1: Token,
-//   token2: Token
-// ): BigDecimal => {
-//   let contract = UniswapLiquidityManager.bind(
-//     Address.fromString("0xD918fD37C24C8F8E75408753AFC1C0Da91836204")
-//   );
-//   let usdWeth = contract.try_getTotalAmounts("address");
-//   let tokenUsd = Token.load("token Usd adddress");
-//   let tokenWeth = Token.load("token Weth adddress");
-
-//   //calculte from above method
-//   let usdPerWeth = sqrtPriceX96ToTokenPrices(sqrtPriceX96, tokenUsd, tokenWeth);
-//   return BigDecimal.fromString("1").div(usdPerWeth[0]);
-// };
-
 export const calculateAmounts = (
   pool: Address,
   totalSupply: BigInt,
@@ -54,7 +37,6 @@ export const calculateAmounts = (
 ): BigDecimal => {
   let contract = UniswapLiquidityManager.bind(Address.fromString(ULM_ADDRESS));
   let totalAmount = contract.try_getTotalAmounts(pool);
-  log.debug("total amount {}", [totalAmount.value.value2.toString()]);
   if (totalAmount.reverted) {
     return BigDecimal.fromString("0");
   }

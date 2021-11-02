@@ -44,7 +44,6 @@ export function handleSwap(event: Swap): void {
   pool.token0Price = prices[0];
   pool.token1Price = prices[1];
   pool.save();
-
   let bundle = Bundle.load("1");
   if (!bundle) {
     bundle = new Bundle("1");
@@ -58,6 +57,25 @@ export function handleSwap(event: Swap): void {
   token0.drivedUSD = token0.drivedETH.times(bundle.ethPriceUSD);
   token1.drivedUSD = token1.drivedETH.times(bundle.ethPriceUSD);
 
+  const poolArr = getPoolDetails(event.address);
+  if (poolArr.length === 0) {
+    return;
+  }
+  const poolPrevTvl = pool.tvl;
+  const updatedAmount = calculateAmounts(
+    event.address,
+    pool.totalSupply,
+    poolArr
+  );
+
+  let protocol = Protocol.load("1");
+  if (!protocol) return;
+  let amount = updatedAmount.minus(poolPrevTvl);
+  pool.tvl = updatedAmount;
+  pool.save();
+
+  protocol.tvl = protocol.tvl.plus(amount);
+  protocol.save();
   token0.save();
   token1.save();
 }
@@ -145,6 +163,7 @@ export function handleDeposit(event: Deposit): void {
   pool.apr = BigInt.fromI32(0);
   pool.nftCount = pool.nftCount.plus(BigInt.fromI32(1));
   pool.fee = BigInt.fromString(poolArr[3]);
+  pool.totalSupply = event.params.totalSupply;
   pool.save();
   //we will need to change this and get it from event Params
   let user = User.load(event.transaction.from.toHexString());
@@ -160,6 +179,8 @@ export function handleDeposit(event: Deposit): void {
     nft.tokenId = event.params.tokenId;
     nft.user = user.address;
     nft.pool = pool.id;
+    nft.liquidity = event.params.liquidity;
+    nft.locked = true;
     nft.save();
   }
 }
@@ -188,6 +209,12 @@ export function handleWithdrawNFT(event: WithdrawNFT): void {
   if (user.nftCount > BigInt.fromI32(0)) {
     user.nftCount = user.nftCount.minus(BigInt.fromI32(1));
   }
+  user.save();
+
+  let nft = Nft.load(event.params.tokenId.toHexString());
+  if (!nft) return;
+  nft.locked = false;
+  nft.save();
 }
 
 export function handleWithdrawReward(event: WithdrawReward): void {
@@ -198,11 +225,17 @@ export function handleWithdrawReward(event: WithdrawReward): void {
   let pool = Pool.load(event.params.pool.toHexString());
   if (!pool) return;
   pool.reward = pool.reward.plus(event.params.reward);
+  // log.debug("pool reward {}, pool reward added {}", [
+  //   event.params.reward.toString(),
+  //   pool.reward.plus(event.params.reward).toString(),
+  // ]);
   pool.save();
   let user = User.load(event.transaction.from.toHexString());
   if (!user) return;
   user.reward = user.reward.plus(event.params.reward);
+  user.save();
   let nft = Nft.load(event.params.nftId.toHexString());
   if (!nft) return;
   nft.reward = nft.reward.plus(event.params.reward);
+  nft.save();
 }

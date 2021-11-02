@@ -202,7 +202,11 @@
         "name": "blockDifference",
         "type": "uint256"
       },
-      { "internalType": "uint256", "name": "reward", "type": "uint256" },
+      {
+        "internalType": "uint256",
+        "name": "rewardPerBlock",
+        "type": "uint256"
+      },
       { "internalType": "uint256", "name": "multiplier", "type": "uint256" },
       { "internalType": "uint256", "name": "_globalReward", "type": "uint256" }
     ],
@@ -317,7 +321,12 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "poolAddress", "type": "address" }
+      { "internalType": "address", "name": "poolAddress", "type": "address" },
+      {
+        "internalType": "address",
+        "name": "altTokenAddress",
+        "type": "address"
+      }
     ],
     "name": "toggleActiveAlt",
     "outputs": [

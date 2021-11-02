@@ -6,7 +6,7 @@ dataSources:
     name: UnipilotFarm
     network: rinkeby
     source:
-      address: "0x1cd1EC267A3817D4c7385DA26ceecF1363c79Ad9"
+      address: "0x0f557660cddc6223fF2B9aA069233Df4453dE55d"
       abi: UnipilotFarm
       startBlock: 9543764
     mapping:
@@ -60,6 +60,8 @@ dataSources:
           file: ./abis/UniswapV3Factory.json
         - name: UniswapV3Pair
           file: ./abis/UniswapV3Pair.json
+        - name: UniswapLiquidityManager
+          file: ./abis/ULM.json
         - name: ULMState
           file: ./abis/ULMState.json
         - name: ERC20

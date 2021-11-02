@@ -149,6 +149,7 @@ export class Pool extends Entity {
     this.set("nftCount", Value.fromBigInt(BigInt.zero()));
     this.set("reward", Value.fromBigInt(BigInt.zero()));
     this.set("fee", Value.fromBigInt(BigInt.zero()));
+    this.set("totalSupply", Value.fromBigInt(BigInt.zero()));
   }
 
   save(): void {
@@ -303,6 +304,15 @@ export class Pool extends Entity {
     this.set("fee", Value.fromBigInt(value));
   }
 
+  get totalSupply(): BigInt {
+    let value = this.get("totalSupply");
+    return value!.toBigInt();
+  }
+
+  set totalSupply(value: BigInt) {
+    this.set("totalSupply", Value.fromBigInt(value));
+  }
+
   get nft(): Array<string> {
     let value = this.get("nft");
     return value!.toStringArray();
@@ -393,6 +403,8 @@ export class Nft extends Entity {
 
     this.set("tokenId", Value.fromBigInt(BigInt.zero()));
     this.set("reward", Value.fromBigInt(BigInt.zero()));
+    this.set("liquidity", Value.fromBigInt(BigInt.zero()));
+    this.set("locked", Value.fromBoolean(false));
     this.set("user", Value.fromString(""));
     this.set("pool", Value.fromString(""));
   }
@@ -439,6 +451,24 @@ export class Nft extends Entity {
 
   set reward(value: BigInt) {
     this.set("reward", Value.fromBigInt(value));
+  }
+
+  get liquidity(): BigInt {
+    let value = this.get("liquidity");
+    return value!.toBigInt();
+  }
+
+  set liquidity(value: BigInt) {
+    this.set("liquidity", Value.fromBigInt(value));
+  }
+
+  get locked(): boolean {
+    let value = this.get("locked");
+    return value!.toBoolean();
+  }
+
+  set locked(value: boolean) {
+    this.set("locked", Value.fromBoolean(value));
   }
 
   get user(): string {

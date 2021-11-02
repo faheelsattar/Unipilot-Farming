@@ -27,6 +27,7 @@ type Pool @entity {
   nftCount: BigInt!
   reward: BigInt!
   fee: BigInt!
+  totalSupply: BigInt!
   nft: [Nft!]! @derivedFrom(field: "pool")
 }
 
@@ -42,6 +43,8 @@ type Nft @entity {
   id: ID!
   tokenId: BigInt!
   reward: BigInt!
+  liquidity: BigInt!
+  locked: Boolean!
   user: User!
   pool: Pool!
 }

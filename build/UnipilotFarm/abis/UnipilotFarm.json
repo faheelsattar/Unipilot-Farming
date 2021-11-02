@@ -272,7 +272,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "reward",
+        "name": "rewardPerBlock",
         "type": "uint256"
       },
       {
@@ -492,6 +492,11 @@
       {
         "internalType": "address",
         "name": "poolAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "altTokenAddress",
         "type": "address"
       }
     ],

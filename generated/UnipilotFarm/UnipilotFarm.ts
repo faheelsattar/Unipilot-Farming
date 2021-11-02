@@ -431,7 +431,7 @@ export class UnipilotFarm extends ethereum.SmartContract {
   getGlobalReward(
     poolAddress: Address,
     blockDifference: BigInt,
-    reward: BigInt,
+    rewardPerBlock: BigInt,
     multiplier: BigInt,
     _globalReward: BigInt
   ): BigInt {
@@ -441,7 +441,7 @@ export class UnipilotFarm extends ethereum.SmartContract {
       [
         ethereum.Value.fromAddress(poolAddress),
         ethereum.Value.fromUnsignedBigInt(blockDifference),
-        ethereum.Value.fromUnsignedBigInt(reward),
+        ethereum.Value.fromUnsignedBigInt(rewardPerBlock),
         ethereum.Value.fromUnsignedBigInt(multiplier),
         ethereum.Value.fromUnsignedBigInt(_globalReward)
       ]
@@ -453,7 +453,7 @@ export class UnipilotFarm extends ethereum.SmartContract {
   try_getGlobalReward(
     poolAddress: Address,
     blockDifference: BigInt,
-    reward: BigInt,
+    rewardPerBlock: BigInt,
     multiplier: BigInt,
     _globalReward: BigInt
   ): ethereum.CallResult<BigInt> {
@@ -463,7 +463,7 @@ export class UnipilotFarm extends ethereum.SmartContract {
       [
         ethereum.Value.fromAddress(poolAddress),
         ethereum.Value.fromUnsignedBigInt(blockDifference),
-        ethereum.Value.fromUnsignedBigInt(reward),
+        ethereum.Value.fromUnsignedBigInt(rewardPerBlock),
         ethereum.Value.fromUnsignedBigInt(multiplier),
         ethereum.Value.fromUnsignedBigInt(_globalReward)
       ]
@@ -636,21 +636,30 @@ export class UnipilotFarm extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
-  toggleActiveAlt(poolAddress: Address): boolean {
+  toggleActiveAlt(poolAddress: Address, altTokenAddress: Address): boolean {
     let result = super.call(
       "toggleActiveAlt",
-      "toggleActiveAlt(address):(bool)",
-      [ethereum.Value.fromAddress(poolAddress)]
+      "toggleActiveAlt(address,address):(bool)",
+      [
+        ethereum.Value.fromAddress(poolAddress),
+        ethereum.Value.fromAddress(altTokenAddress)
+      ]
     );
 
     return result[0].toBoolean();
   }
 
-  try_toggleActiveAlt(poolAddress: Address): ethereum.CallResult<boolean> {
+  try_toggleActiveAlt(
+    poolAddress: Address,
+    altTokenAddress: Address
+  ): ethereum.CallResult<boolean> {
     let result = super.tryCall(
       "toggleActiveAlt",
-      "toggleActiveAlt(address):(bool)",
-      [ethereum.Value.fromAddress(poolAddress)]
+      "toggleActiveAlt(address,address):(bool)",
+      [
+        ethereum.Value.fromAddress(poolAddress),
+        ethereum.Value.fromAddress(altTokenAddress)
+      ]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -1221,6 +1230,10 @@ export class ToggleActiveAltCall__Inputs {
 
   get poolAddress(): Address {
     return this._call.inputValues[0].value.toAddress();
+  }
+
+  get altTokenAddress(): Address {
+    return this._call.inputValues[1].value.toAddress();
   }
 }
 

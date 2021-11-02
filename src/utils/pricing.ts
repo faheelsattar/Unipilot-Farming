@@ -20,26 +20,12 @@ export function sqrtPriceX96ToTokenPrices(
 ): BigDecimal[] {
   let num = sqrtPriceX96.times(sqrtPriceX96).toBigDecimal();
   let denom = Q192;
-  log.error(
-    "Q192 {}, sqrtPrice {}, num {}, denom {}, token 0. {} decimals, token 1. decimals {}",
-    [
-      Q192.toString(),
-      sqrtPriceX96.toString(),
-      num.toString(),
-      denom.toString(),
-      token0.decimals.toString(),
-      token1.decimals.toString(),
-    ]
-  );
-
   let price1 = num
     .div(denom)
     .times(exponentToBigDecimal(token0.decimals))
     .div(exponentToBigDecimal(token1.decimals));
 
-  log.error("Price 1 {}", [price1.toString()]);
   let price0 = safeDiv(BigDecimal.fromString("1"), price1);
-  log.error("Price 0 {}", [price0.toString()]);
   return [price0, price1];
 }
 
