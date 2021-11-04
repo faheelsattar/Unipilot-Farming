@@ -6,7 +6,7 @@ dataSources:
     name: UnipilotFarm
     network: rinkeby
     source:
-      address: "0xd70854a9146ad1b5cfd524a468154a3bef66babe"
+      address: "0x879f4aabc68dd9aaaa9159cec26a114f8fd665a9"
       abi: UnipilotFarm
       startBlock: 9543764
     mapping:

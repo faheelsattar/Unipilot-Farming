@@ -51,6 +51,7 @@ export function findWethPerTokenV3(tokenAddress: string): BigDecimal {
     Address.fromString(WETH),
     BigInt.fromI32(3000)
   );
+  log.debug(" pricing pool -> {}", [poolAddress]);
 
   const poolArr = getPoolDetails(Address.fromString(poolAddress));
   if (poolArr.length == 0) return ZERO_BD;
@@ -58,22 +59,30 @@ export function findWethPerTokenV3(tokenAddress: string): BigDecimal {
   let token1 = Token.load(poolArr[1]);
   if (token0 == null || token1 == null) {
     if (token0 == null) {
-      log.debug("token 0 {}", ["not found"]);
+      log.debug("token 0 not found pool -> {}", [poolAddress]);
     }
     if (token1 == null) {
-      log.debug("token 1 {}", ["not found"]);
+      log.debug("token 1 not found pool -> {}", [poolAddress]);
     }
+    log.debug("not found weth invoked", []);
     return ZERO_BD;
   }
+  log.debug("token0 in findWeth {} {} token1 in findWeth {} {}", [
+    token0.id,
+    token0.symbol,
+    token1.id,
+    token1.symbol,
+  ]);
   const prices = sqrtPriceX96ToTokenPrices(
     BigInt.fromString(poolArr[2]),
     token0,
     token1
   );
-  log.debug("Prices {} {} {}", [
+  log.debug("Prices {} {} {} {}", [
     prices[0].toString(),
     prices[1].toString(),
     token0.symbol,
+    token1.symbol,
   ]);
   let wethPerToken = ZERO_BD;
   if (token0.symbol == "WETH") {

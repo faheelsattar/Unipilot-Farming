@@ -60,19 +60,25 @@ export const calculateAmounts = (
     return BigDecimal.fromString("0");
   }
 
-  log.debug("1st case Amiunt 1 {} {}, Amount 2 {} {}", [
+  log.debug("1st case Amiunt 1 {} {} {}, Amount 2 {} {} {}", [
     convertAmount0.toString(),
+    token1.id,
     token1.drivedUSD.toString(),
-    amount1.toString(),
+    convertAmount1.toString(),
     token2.drivedUSD.toString(),
+    token2.id,
   ]);
 
   convertAmount0 = convertAmount0.times(token1.drivedUSD);
   convertAmount1 = convertAmount1.times(token2.drivedUSD);
 
-  log.debug("2nd case Amiunt 1 {}, Amount 2 {}", [
+  log.debug("2nd case Amiunt 1 {} {} {}, Amount 2 {} {} {}", [
     convertAmount0.toString(),
+    token1.id,
+    token1.drivedUSD.toString(),
     convertAmount1.toString(),
+    token2.drivedUSD.toString(),
+    token2.id,
   ]);
   let totalLiquidity = totalAmount.value.value4.toBigDecimal();
   let liquidity = totalSupply.toBigDecimal();
@@ -84,11 +90,14 @@ export const calculateAmounts = (
   ]);
   convertAmount0 = convertAmount0.times(ratioLiquidity);
   convertAmount1 = convertAmount1.times(ratioLiquidity);
-  log.debug("3rd cas Amiunt 1 {}, Amount 2 {}", [
+  log.debug("3rd cas Amiunt 1 {} {} {} , Amount 2 {} {} {}", [
     convertAmount0.toString(),
+    token1.id,
+    token1.drivedUSD.toString(),
     convertAmount1.toString(),
+    token2.drivedUSD.toString(),
+    token2.id,
   ]);
-
   return convertAmount0.plus(convertAmount1);
 };
 

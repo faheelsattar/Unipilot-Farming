@@ -67,6 +67,7 @@ export function handleNewPool(event: NewPool): void {
   }
   pool.token0 = token0.id;
   pool.token1 = token1.id;
+  pool.fee = BigInt.fromString(poolArr[3]);
   pool.save();
 }
 
@@ -154,12 +155,16 @@ export function handleDeposit(event: Deposit): void {
   if (!protocol) return;
   protocol.totalNftLocked = protocol.totalNftLocked.plus(BigInt.fromI32(1));
   let pool = Pool.load(event.params.pool.toHexString());
-  if (!pool) return;
+  if (!pool) {
+    log.debug("pool not found {}", [event.params.pool.toHexString()]);
+    return;
+  }
   log.debug("pool {}", [event.params.pool.toHexString()]);
 
   //get token1 address, token2 address and sqrtPriceX96
   const poolArr = getPoolDetails(event.params.pool);
   if (poolArr.length === 0) {
+    log.debug("pool arr not found", []);
     return;
   }
 
@@ -177,6 +182,11 @@ export function handleDeposit(event: Deposit): void {
   token0.drivedUSD = BigDecimal.fromString("0");
   token0.save();
 
+  log.debug("token 0 {} derived eth {}", [
+    token0.id,
+    findWethPerTokenV3(token0.id).toString(),
+  ]);
+
   token0.drivedETH = findWethPerTokenV3(token0.id);
   token0.drivedUSD = token0.drivedETH.times(bundle.ethPriceUSD);
   token0.save();
@@ -185,6 +195,10 @@ export function handleDeposit(event: Deposit): void {
   token1.drivedUSD = BigDecimal.fromString("0");
   token1.save();
 
+  log.debug("token 1 {} derived eth {}", [
+    token1.id,
+    findWethPerTokenV3(token1.id).toString(),
+  ]);
   token1.drivedETH = findWethPerTokenV3(token1.id);
   token1.drivedUSD = token1.drivedETH.times(bundle.ethPriceUSD);
   token1.save();
