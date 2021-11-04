@@ -39,9 +39,9 @@ export function initPool(event: Swap): void {
     token1 as Token
   );
   token0.drivedETH = BigDecimal.fromString("0");
-  token0.drivedUSD = BigDecimal.fromString("0");
+  token0.drivedUSD = BigDecimal.fromString("1");
   token0.save();
-  token1.drivedETH = BigDecimal.fromString("0");
+  token1.drivedETH = BigDecimal.fromString("1");
   token1.drivedUSD = BigDecimal.fromString("0");
   token1.save();
 

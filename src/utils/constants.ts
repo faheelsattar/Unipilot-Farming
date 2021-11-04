@@ -11,7 +11,7 @@ export const USDT = "0x2a0aba85972df32321d05e11be5d3a0d0c1fb62f";
 export const USDC_WETH_03_ADDRESS =
   "0xe63c7fbc01df71d356ee585b1ba0b41183da67b4";
 
-export const UNISWAP_V3_FACTORY = "0x1F98431c8aD98523631AE4a59f267346ea31F984";
+export const UNISWAP_V3_FACTORY = "0x1f98431c8ad98523631ae4a59f267346ea31f984";
 
 export let ZERO_BI = BigInt.fromI32(0);
 export let ONE_BI = BigInt.fromI32(1);

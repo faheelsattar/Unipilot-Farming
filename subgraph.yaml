@@ -6,7 +6,7 @@ dataSources:
     name: UnipilotFarm
     network: rinkeby
     source:
-      address: "0x0f557660cddc6223fF2B9aA069233Df4453dE55d"
+      address: "0xd70854a9146ad1b5cfd524a468154a3bef66babe"
       abi: UnipilotFarm
       startBlock: 9543764
     mapping:
@@ -41,6 +41,12 @@ dataSources:
           handler: handleWithdrawNFT
         - event: WithdrawReward(address,uint256,uint256,uint256,uint256,uint256,uint256)
           handler: handleWithdrawReward
+        - event: NewPool(address,uint256,uint256,uint256,bool)
+          handler: handleNewPool
+        - event: UpdatePilotPerBlock(address,uint256,uint256)
+          handler: handleUpdatedPilorPerBlock
+        - event: UpdateMultiplier(address,uint256,uint256)
+          handler: handleUpdateMultiplier
       file: ./src/mapping.ts
   - kind: ethereum/contract
     name: UniswapV3Pair

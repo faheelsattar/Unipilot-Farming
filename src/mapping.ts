@@ -1,6 +1,9 @@
 import { Address, BigDecimal, BigInt, log } from "@graphprotocol/graph-ts";
 import {
   Deposit,
+  NewPool,
+  UpdateMultiplier,
+  UpdatePilotPerBlock,
   WithdrawNFT,
   WithdrawReward,
 } from "../generated/UnipilotFarm/UnipilotFarm";
@@ -23,6 +26,61 @@ import {
 } from "./utils/pricing";
 import { initPool } from "./common";
 
+export function handleNewPool(event: NewPool): void {
+  let protocol = Protocol.load("1");
+  if (!protocol) {
+    protocol = new Protocol("1");
+    protocol.save();
+  }
+  let pool = Pool.load(event.params.poolAddress.toHexString());
+  if (!pool) {
+    pool = new Pool(event.params.poolAddress.toHexString());
+    pool.multiplier = event.params.rewardMultiplier;
+    pool.pilotPerBlock = event.params.rewardPerBlock;
+  }
+  const poolArr = getPoolDetails(event.params.poolAddress);
+  if (poolArr.length === 0) {
+    return;
+  }
+  let token0 = Token.load(poolArr[0]);
+  let token1 = Token.load(poolArr[1]);
+  if (!token0) {
+    token0 = new Token(poolArr[0]);
+    token0.name = fetchTokenName(Address.fromString(poolArr[0]));
+    token0.symbol = fetchTokenSymbol(Address.fromString(poolArr[0]));
+    token0.totalSupply = fetchTokenTotalSupply(Address.fromString(poolArr[0]));
+    token0.decimals = fetchTokenDecimals(Address.fromString(poolArr[0]));
+    token0.drivedETH = BigDecimal.fromString("0");
+    token0.drivedUSD = BigDecimal.fromString("0");
+    token0.save();
+  }
+
+  if (!token1) {
+    token1 = new Token(poolArr[1]);
+    token1.name = fetchTokenName(Address.fromString(poolArr[1]));
+    token1.symbol = fetchTokenSymbol(Address.fromString(poolArr[1]));
+    token1.totalSupply = fetchTokenTotalSupply(Address.fromString(poolArr[1]));
+    token1.decimals = fetchTokenDecimals(Address.fromString(poolArr[1]));
+    token1.drivedETH = BigDecimal.fromString("0");
+    token1.drivedUSD = BigDecimal.fromString("0");
+    token1.save();
+  }
+  pool.token0 = token0.id;
+  pool.token1 = token1.id;
+  pool.save();
+}
+
+export function handleUpdatedPilorPerBlock(event: UpdatePilotPerBlock): void {
+  let pool = Pool.load(event.params.poolAddress.toHexString());
+  if (!pool) return;
+  pool.pilotPerBlock = event.params.updated;
+}
+
+export function handleUpdateMultiplier(event: UpdateMultiplier): void {
+  let pool = Pool.load(event.params.poolAddress.toHexString());
+  if (!pool) return;
+  pool.pilotPerBlock = event.params.updated;
+}
 export function handleSwap(event: Swap): void {
   if (event.address.toHexString() == USDC_WETH_03_ADDRESS) {
     initPool(event);
@@ -70,10 +128,21 @@ export function handleSwap(event: Swap): void {
 
   let protocol = Protocol.load("1");
   if (!protocol) return;
+
+  log.debug("updated amount {} {} {}", [
+    updatedAmount.toString(),
+    poolPrevTvl.toString(),
+    updatedAmount.minus(poolPrevTvl).toString(),
+  ]);
+
   let amount = updatedAmount.minus(poolPrevTvl);
   pool.tvl = updatedAmount;
   pool.save();
 
+  log.debug("protocol tvl {} {}", [
+    protocol.tvl.toString(),
+    protocol.tvl.plus(amount).toString(),
+  ]);
   protocol.tvl = protocol.tvl.plus(amount);
   protocol.save();
   token0.save();
@@ -82,12 +151,10 @@ export function handleSwap(event: Swap): void {
 
 export function handleDeposit(event: Deposit): void {
   let protocol = Protocol.load("1");
-  if (!protocol) {
-    protocol = new Protocol("1");
-    protocol.rewardDistributed = BigInt.fromI32(0);
-  }
+  if (!protocol) return;
   protocol.totalNftLocked = protocol.totalNftLocked.plus(BigInt.fromI32(1));
   let pool = Pool.load(event.params.pool.toHexString());
+  if (!pool) return;
   log.debug("pool {}", [event.params.pool.toHexString()]);
 
   //get token1 address, token2 address and sqrtPriceX96
@@ -95,9 +162,7 @@ export function handleDeposit(event: Deposit): void {
   if (poolArr.length === 0) {
     return;
   }
-  if (!pool) {
-    pool = new Pool(event.params.pool.toHexString());
-  }
+
   let bundle = Bundle.load("1");
   if (!bundle) {
     bundle = new Bundle("1");
@@ -107,43 +172,19 @@ export function handleDeposit(event: Deposit): void {
   log.debug("pool ARR {} {} {}", poolArr);
   let token0 = Token.load(poolArr[0]);
   let token1 = Token.load(poolArr[1]);
-  if (!token0) {
-    token0 = new Token(poolArr[0]);
-    token0.name = fetchTokenName(Address.fromString(poolArr[0]));
-    token0.symbol = fetchTokenSymbol(Address.fromString(poolArr[0]));
-    token0.totalSupply = fetchTokenTotalSupply(Address.fromString(poolArr[0]));
-    token0.decimals = fetchTokenDecimals(Address.fromString(poolArr[0]));
-  }
+  if (!token0) return;
   token0.drivedETH = BigDecimal.fromString("0");
   token0.drivedUSD = BigDecimal.fromString("0");
   token0.save();
 
-  log.debug("eth price in usd {}", [getEthPriceInUSD().toString()]);
-  log.debug("token 0 derived ETH {}", [
-    findWethPerTokenV3(token0.id).toString(),
-  ]);
   token0.drivedETH = findWethPerTokenV3(token0.id);
   token0.drivedUSD = token0.drivedETH.times(bundle.ethPriceUSD);
   token0.save();
-  if (!token1) {
-    token1 = new Token(poolArr[1]);
-    token1.name = fetchTokenName(Address.fromString(poolArr[1]));
-    token1.symbol = fetchTokenSymbol(Address.fromString(poolArr[1]));
-    token1.totalSupply = fetchTokenTotalSupply(Address.fromString(poolArr[1]));
-    token1.decimals = fetchTokenDecimals(Address.fromString(poolArr[1]));
-  }
+  if (!token1) return;
   token1.drivedETH = BigDecimal.fromString("0");
   token1.drivedUSD = BigDecimal.fromString("0");
   token1.save();
 
-  log.debug("token 1 derived ETH {}", [
-    findWethPerTokenV3(token1.id).toString(),
-  ]);
-  log.debug("token 1 derived USD {}", [
-    findWethPerTokenV3(token1.id)
-      .times(bundle.ethPriceUSD)
-      .toString(),
-  ]);
   token1.drivedETH = findWethPerTokenV3(token1.id);
   token1.drivedUSD = token1.drivedETH.times(bundle.ethPriceUSD);
   token1.save();
@@ -152,7 +193,9 @@ export function handleDeposit(event: Deposit): void {
     event.params.totalSupply,
     poolArr
   );
+
   log.debug("updated amount {}", [updatedAmount.toString()]);
+  log.debug("protocol tvl in deposit {}", [protocol.tvl.toString()]);
   protocol.tvl = protocol.tvl.plus(updatedAmount);
   protocol.save();
   pool.token0 = token0.id;
@@ -220,11 +263,11 @@ export function handleWithdrawNFT(event: WithdrawNFT): void {
 export function handleWithdrawReward(event: WithdrawReward): void {
   let protocol = Protocol.load("1");
   if (!protocol) return;
-  protocol.reward = event.params.globalReward;
+  protocol.reward = protocol.reward.plus(event.params.lastRewardTransferred);
   protocol.save();
   let pool = Pool.load(event.params.pool.toHexString());
   if (!pool) return;
-  pool.reward = pool.reward.plus(event.params.reward);
+  pool.reward = pool.reward.plus(event.params.lastRewardTransferred);
   // log.debug("pool reward {}, pool reward added {}", [
   //   event.params.reward.toString(),
   //   pool.reward.plus(event.params.reward).toString(),
@@ -232,10 +275,10 @@ export function handleWithdrawReward(event: WithdrawReward): void {
   pool.save();
   let user = User.load(event.transaction.from.toHexString());
   if (!user) return;
-  user.reward = user.reward.plus(event.params.reward);
+  user.reward = user.reward.plus(event.params.lastRewardTransferred);
   user.save();
-  let nft = Nft.load(event.params.nftId.toHexString());
+  let nft = Nft.load(event.params.tokenId.toHexString());
   if (!nft) return;
-  nft.reward = nft.reward.plus(event.params.reward);
+  nft.reward = nft.reward.plus(event.params.lastRewardTransferred);
   nft.save();
 }

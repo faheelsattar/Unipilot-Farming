@@ -70,7 +70,11 @@ export function findWethPerTokenV3(tokenAddress: string): BigDecimal {
     token0,
     token1
   );
-  log.debug("Prices {} {}", [prices[0].toString(), prices[1].toString()]);
+  log.debug("Prices {} {} {}", [
+    prices[0].toString(),
+    prices[1].toString(),
+    token0.symbol,
+  ]);
   let wethPerToken = ZERO_BD;
   if (token0.symbol == "WETH") {
     wethPerToken = prices[0];

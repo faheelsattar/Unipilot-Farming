@@ -10,6 +10,7 @@ import {
   ULM_ADDRESS,
   ULM_STATE_ADDRESS,
   UNISWAP_V3_FACTORY,
+  ZERO_BI,
 } from "./utils/constants";
 import {
   fetchTokenDecimals,
@@ -17,6 +18,7 @@ import {
   fetchTokenSymbol,
   fetchTokenTotalSupply,
 } from "./utils/token";
+import { exponentToBigDecimal } from "./utils";
 export const getPoolDetails = (pool: Address): string[] => {
   let contract = ULMState.bind(Address.fromString(ULM_STATE_ADDRESS));
   let data = contract.try_getPoolDetails(pool);
@@ -40,8 +42,13 @@ export const calculateAmounts = (
   if (totalAmount.reverted) {
     return BigDecimal.fromString("0");
   }
-  let amount1 = totalAmount.value.value2.toBigDecimal();
-  let amount2 = totalAmount.value.value3.toBigDecimal();
+  let amount0 = totalAmount.value.value2;
+  let amount1 = totalAmount.value.value3;
+  let decimal0 = fetchTokenDecimals(Address.fromString(poolArr[0]));
+  let decimal1 = fetchTokenDecimals(Address.fromString(poolArr[1]));
+  let convertAmount0 = tokenAmountToDecimal(amount0, decimal0);
+  let convertAmount1 = tokenAmountToDecimal(amount1, decimal1);
+
   let token1 = Token.load(poolArr[0]);
   let token2 = Token.load(poolArr[1]);
   log.debug("token 1 {}, token 2 {}", [poolArr[0], poolArr[1]]);
@@ -54,18 +61,18 @@ export const calculateAmounts = (
   }
 
   log.debug("1st case Amiunt 1 {} {}, Amount 2 {} {}", [
-    amount1.toString(),
+    convertAmount0.toString(),
     token1.drivedUSD.toString(),
-    amount2.toString(),
+    amount1.toString(),
     token2.drivedUSD.toString(),
   ]);
 
-  amount1 = amount1.times(token1.drivedUSD);
-  amount2 = amount2.times(token2.drivedUSD);
+  convertAmount0 = convertAmount0.times(token1.drivedUSD);
+  convertAmount1 = convertAmount1.times(token2.drivedUSD);
 
   log.debug("2nd case Amiunt 1 {}, Amount 2 {}", [
-    amount1.toString(),
-    amount2.toString(),
+    convertAmount0.toString(),
+    convertAmount1.toString(),
   ]);
   let totalLiquidity = totalAmount.value.value4.toBigDecimal();
   let liquidity = totalSupply.toBigDecimal();
@@ -75,15 +82,25 @@ export const calculateAmounts = (
     liquidity.toString(),
     ratioLiquidity.toString(),
   ]);
-  amount1 = amount1.times(ratioLiquidity);
-  amount2 = amount2.times(ratioLiquidity);
+  convertAmount0 = convertAmount0.times(ratioLiquidity);
+  convertAmount1 = convertAmount1.times(ratioLiquidity);
   log.debug("3rd cas Amiunt 1 {}, Amount 2 {}", [
-    amount1.toString(),
-    amount2.toString(),
+    convertAmount0.toString(),
+    convertAmount1.toString(),
   ]);
 
-  return amount1.plus(amount2);
+  return convertAmount0.plus(convertAmount1);
 };
+
+export function tokenAmountToDecimal(
+  tokenAmount: BigInt,
+  exchangeDecimals: BigInt
+): BigDecimal {
+  if (exchangeDecimals == ZERO_BI) {
+    return tokenAmount.toBigDecimal();
+  }
+  return tokenAmount.toBigDecimal().div(exponentToBigDecimal(exchangeDecimals));
+}
 
 export function getUniswapPool(
   token0Address: Address,

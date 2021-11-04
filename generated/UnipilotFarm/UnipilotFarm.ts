@@ -52,6 +52,244 @@ export class Deposit__Params {
   }
 }
 
+export class NewPool extends ethereum.Event {
+  get params(): NewPool__Params {
+    return new NewPool__Params(this);
+  }
+}
+
+export class NewPool__Params {
+  _event: NewPool;
+
+  constructor(event: NewPool) {
+    this._event = event;
+  }
+
+  get poolAddress(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get rewardPerBlock(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
+  }
+
+  get rewardMultiplier(): BigInt {
+    return this._event.parameters[2].value.toBigInt();
+  }
+
+  get lastAltRewardBlock(): BigInt {
+    return this._event.parameters[3].value.toBigInt();
+  }
+
+  get status(): boolean {
+    return this._event.parameters[4].value.toBoolean();
+  }
+}
+
+export class UpdateActiveAlt extends ethereum.Event {
+  get params(): UpdateActiveAlt__Params {
+    return new UpdateActiveAlt__Params(this);
+  }
+}
+
+export class UpdateActiveAlt__Params {
+  _event: UpdateActiveAlt;
+
+  constructor(event: UpdateActiveAlt) {
+    this._event = event;
+  }
+
+  get poolAddress(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get old(): boolean {
+    return this._event.parameters[1].value.toBoolean();
+  }
+
+  get updated(): boolean {
+    return this._event.parameters[2].value.toBoolean();
+  }
+}
+
+export class UpdateAltMultiplier extends ethereum.Event {
+  get params(): UpdateAltMultiplier__Params {
+    return new UpdateAltMultiplier__Params(this);
+  }
+}
+
+export class UpdateAltMultiplier__Params {
+  _event: UpdateAltMultiplier;
+
+  constructor(event: UpdateAltMultiplier) {
+    this._event = event;
+  }
+
+  get poolAddress(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get old(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
+  }
+
+  get updated(): BigInt {
+    return this._event.parameters[2].value.toBigInt();
+  }
+}
+
+export class UpdateAltPerBlock extends ethereum.Event {
+  get params(): UpdateAltPerBlock__Params {
+    return new UpdateAltPerBlock__Params(this);
+  }
+}
+
+export class UpdateAltPerBlock__Params {
+  _event: UpdateAltPerBlock;
+
+  constructor(event: UpdateAltPerBlock) {
+    this._event = event;
+  }
+
+  get poolAddress(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get old(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
+  }
+
+  get updated(): BigInt {
+    return this._event.parameters[2].value.toBigInt();
+  }
+}
+
+export class UpdateAltToken extends ethereum.Event {
+  get params(): UpdateAltToken__Params {
+    return new UpdateAltToken__Params(this);
+  }
+}
+
+export class UpdateAltToken__Params {
+  _event: UpdateAltToken;
+
+  constructor(event: UpdateAltToken) {
+    this._event = event;
+  }
+
+  get poolAddress(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get old(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+
+  get updated(): Address {
+    return this._event.parameters[2].value.toAddress();
+  }
+}
+
+export class UpdateFarmingLimit extends ethereum.Event {
+  get params(): UpdateFarmingLimit__Params {
+    return new UpdateFarmingLimit__Params(this);
+  }
+}
+
+export class UpdateFarmingLimit__Params {
+  _event: UpdateFarmingLimit;
+
+  constructor(event: UpdateFarmingLimit) {
+    this._event = event;
+  }
+
+  get old(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+
+  get updated(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
+  }
+}
+
+export class UpdateMultiplier extends ethereum.Event {
+  get params(): UpdateMultiplier__Params {
+    return new UpdateMultiplier__Params(this);
+  }
+}
+
+export class UpdateMultiplier__Params {
+  _event: UpdateMultiplier;
+
+  constructor(event: UpdateMultiplier) {
+    this._event = event;
+  }
+
+  get poolAddress(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get old(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
+  }
+
+  get updated(): BigInt {
+    return this._event.parameters[2].value.toBigInt();
+  }
+}
+
+export class UpdatePilotPerBlock extends ethereum.Event {
+  get params(): UpdatePilotPerBlock__Params {
+    return new UpdatePilotPerBlock__Params(this);
+  }
+}
+
+export class UpdatePilotPerBlock__Params {
+  _event: UpdatePilotPerBlock;
+
+  constructor(event: UpdatePilotPerBlock) {
+    this._event = event;
+  }
+
+  get poolAddress(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get old(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
+  }
+
+  get updated(): BigInt {
+    return this._event.parameters[2].value.toBigInt();
+  }
+}
+
+export class UpdateULM extends ethereum.Event {
+  get params(): UpdateULM__Params {
+    return new UpdateULM__Params(this);
+  }
+}
+
+export class UpdateULM__Params {
+  _event: UpdateULM;
+
+  constructor(event: UpdateULM) {
+    this._event = event;
+  }
+
+  get oldAddress(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get newAddress(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+
+  get param2(): BigInt {
+    return this._event.parameters[2].value.toBigInt();
+  }
+}
+
 export class WithdrawNFT extends ethereum.Event {
   get params(): WithdrawNFT__Params {
     return new WithdrawNFT__Params(this);
@@ -99,7 +337,7 @@ export class WithdrawReward__Params {
     return this._event.parameters[0].value.toAddress();
   }
 
-  get nftId(): BigInt {
+  get tokenId(): BigInt {
     return this._event.parameters[1].value.toBigInt();
   }
 
@@ -159,34 +397,32 @@ export class UnipilotFarm__currentRewardResult {
 }
 
 export class UnipilotFarm__poolInfoResult {
-  value0: Address;
+  value0: BigInt;
   value1: BigInt;
   value2: BigInt;
   value3: BigInt;
   value4: BigInt;
   value5: BigInt;
-  value6: BigInt;
-  value7: Address;
-  value8: boolean;
+  value6: Address;
+  value7: boolean;
+  value8: BigInt;
   value9: BigInt;
   value10: BigInt;
   value11: BigInt;
-  value12: BigInt;
 
   constructor(
-    value0: Address,
+    value0: BigInt,
     value1: BigInt,
     value2: BigInt,
     value3: BigInt,
     value4: BigInt,
     value5: BigInt,
-    value6: BigInt,
-    value7: Address,
-    value8: boolean,
+    value6: Address,
+    value7: boolean,
+    value8: BigInt,
     value9: BigInt,
     value10: BigInt,
-    value11: BigInt,
-    value12: BigInt
+    value11: BigInt
   ) {
     this.value0 = value0;
     this.value1 = value1;
@@ -200,24 +436,22 @@ export class UnipilotFarm__poolInfoResult {
     this.value9 = value9;
     this.value10 = value10;
     this.value11 = value11;
-    this.value12 = value12;
   }
 
   toMap(): TypedMap<string, ethereum.Value> {
     let map = new TypedMap<string, ethereum.Value>();
-    map.set("value0", ethereum.Value.fromAddress(this.value0));
+    map.set("value0", ethereum.Value.fromUnsignedBigInt(this.value0));
     map.set("value1", ethereum.Value.fromUnsignedBigInt(this.value1));
     map.set("value2", ethereum.Value.fromUnsignedBigInt(this.value2));
     map.set("value3", ethereum.Value.fromUnsignedBigInt(this.value3));
     map.set("value4", ethereum.Value.fromUnsignedBigInt(this.value4));
     map.set("value5", ethereum.Value.fromUnsignedBigInt(this.value5));
-    map.set("value6", ethereum.Value.fromUnsignedBigInt(this.value6));
-    map.set("value7", ethereum.Value.fromAddress(this.value7));
-    map.set("value8", ethereum.Value.fromBoolean(this.value8));
+    map.set("value6", ethereum.Value.fromAddress(this.value6));
+    map.set("value7", ethereum.Value.fromBoolean(this.value7));
+    map.set("value8", ethereum.Value.fromUnsignedBigInt(this.value8));
     map.set("value9", ethereum.Value.fromUnsignedBigInt(this.value9));
     map.set("value10", ethereum.Value.fromUnsignedBigInt(this.value10));
     map.set("value11", ethereum.Value.fromUnsignedBigInt(this.value11));
-    map.set("value12", ethereum.Value.fromUnsignedBigInt(this.value12));
     return map;
   }
 }
@@ -246,7 +480,6 @@ export class UnipilotFarm__userInfoResult {
   value3: Address;
   value4: BigInt;
   value5: BigInt;
-  value6: boolean;
 
   constructor(
     value0: BigInt,
@@ -254,8 +487,7 @@ export class UnipilotFarm__userInfoResult {
     value2: BigInt,
     value3: Address,
     value4: BigInt,
-    value5: BigInt,
-    value6: boolean
+    value5: BigInt
   ) {
     this.value0 = value0;
     this.value1 = value1;
@@ -263,7 +495,6 @@ export class UnipilotFarm__userInfoResult {
     this.value3 = value3;
     this.value4 = value4;
     this.value5 = value5;
-    this.value6 = value6;
   }
 
   toMap(): TypedMap<string, ethereum.Value> {
@@ -274,7 +505,6 @@ export class UnipilotFarm__userInfoResult {
     map.set("value3", ethereum.Value.fromAddress(this.value3));
     map.set("value4", ethereum.Value.fromUnsignedBigInt(this.value4));
     map.set("value5", ethereum.Value.fromUnsignedBigInt(this.value5));
-    map.set("value6", ethereum.Value.fromBoolean(this.value6));
     return map;
   }
 }
@@ -284,17 +514,11 @@ export class UnipilotFarm extends ethereum.SmartContract {
     return new UnipilotFarm("UnipilotFarm", address);
   }
 
-  currentAltReward(
-    poolAddress: Address,
-    tokenId: BigInt
-  ): UnipilotFarm__currentAltRewardResult {
+  currentAltReward(tokenId: BigInt): UnipilotFarm__currentAltRewardResult {
     let result = super.call(
       "currentAltReward",
-      "currentAltReward(address,uint256):(uint256,uint256)",
-      [
-        ethereum.Value.fromAddress(poolAddress),
-        ethereum.Value.fromUnsignedBigInt(tokenId)
-      ]
+      "currentAltReward(uint256):(uint256,uint256)",
+      [ethereum.Value.fromUnsignedBigInt(tokenId)]
     );
 
     return new UnipilotFarm__currentAltRewardResult(
@@ -304,16 +528,12 @@ export class UnipilotFarm extends ethereum.SmartContract {
   }
 
   try_currentAltReward(
-    poolAddress: Address,
     tokenId: BigInt
   ): ethereum.CallResult<UnipilotFarm__currentAltRewardResult> {
     let result = super.tryCall(
       "currentAltReward",
-      "currentAltReward(address,uint256):(uint256,uint256)",
-      [
-        ethereum.Value.fromAddress(poolAddress),
-        ethereum.Value.fromUnsignedBigInt(tokenId)
-      ]
+      "currentAltReward(uint256):(uint256,uint256)",
+      [ethereum.Value.fromUnsignedBigInt(tokenId)]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -327,17 +547,11 @@ export class UnipilotFarm extends ethereum.SmartContract {
     );
   }
 
-  currentReward(
-    poolAddress: Address,
-    tokenId: BigInt
-  ): UnipilotFarm__currentRewardResult {
+  currentReward(tokenId: BigInt): UnipilotFarm__currentRewardResult {
     let result = super.call(
       "currentReward",
-      "currentReward(address,uint256):(uint256,uint256)",
-      [
-        ethereum.Value.fromAddress(poolAddress),
-        ethereum.Value.fromUnsignedBigInt(tokenId)
-      ]
+      "currentReward(uint256):(uint256,uint256)",
+      [ethereum.Value.fromUnsignedBigInt(tokenId)]
     );
 
     return new UnipilotFarm__currentRewardResult(
@@ -347,16 +561,12 @@ export class UnipilotFarm extends ethereum.SmartContract {
   }
 
   try_currentReward(
-    poolAddress: Address,
     tokenId: BigInt
   ): ethereum.CallResult<UnipilotFarm__currentRewardResult> {
     let result = super.tryCall(
       "currentReward",
-      "currentReward(address,uint256):(uint256,uint256)",
-      [
-        ethereum.Value.fromAddress(poolAddress),
-        ethereum.Value.fromUnsignedBigInt(tokenId)
-      ]
+      "currentReward(uint256):(uint256,uint256)",
+      [ethereum.Value.fromUnsignedBigInt(tokenId)]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -370,30 +580,38 @@ export class UnipilotFarm extends ethereum.SmartContract {
     );
   }
 
-  depositNFT(poolAddress: Address, tokenId: BigInt): boolean {
-    let result = super.call(
-      "depositNFT",
-      "depositNFT(address,uint256):(bool)",
-      [
-        ethereum.Value.fromAddress(poolAddress),
-        ethereum.Value.fromUnsignedBigInt(tokenId)
-      ]
-    );
+  depositNFT(tokenId: BigInt): boolean {
+    let result = super.call("depositNFT", "depositNFT(uint256):(bool)", [
+      ethereum.Value.fromUnsignedBigInt(tokenId)
+    ]);
 
     return result[0].toBoolean();
   }
 
-  try_depositNFT(
-    poolAddress: Address,
-    tokenId: BigInt
-  ): ethereum.CallResult<boolean> {
+  try_depositNFT(tokenId: BigInt): ethereum.CallResult<boolean> {
+    let result = super.tryCall("depositNFT", "depositNFT(uint256):(bool)", [
+      ethereum.Value.fromUnsignedBigInt(tokenId)
+    ]);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
+  farmingActive(param0: BigInt): boolean {
+    let result = super.call("farmingActive", "farmingActive(uint256):(bool)", [
+      ethereum.Value.fromUnsignedBigInt(param0)
+    ]);
+
+    return result[0].toBoolean();
+  }
+
+  try_farmingActive(param0: BigInt): ethereum.CallResult<boolean> {
     let result = super.tryCall(
-      "depositNFT",
-      "depositNFT(address,uint256):(bool)",
-      [
-        ethereum.Value.fromAddress(poolAddress),
-        ethereum.Value.fromUnsignedBigInt(tokenId)
-      ]
+      "farmingActive",
+      "farmingActive(uint256):(bool)",
+      [ethereum.Value.fromUnsignedBigInt(param0)]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -402,30 +620,27 @@ export class UnipilotFarm extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
-  farmingActive(param0: Address, param1: Address): boolean {
+  farmingGrowthBlockLimit(): BigInt {
     let result = super.call(
-      "farmingActive",
-      "farmingActive(address,address):(bool)",
-      [ethereum.Value.fromAddress(param0), ethereum.Value.fromAddress(param1)]
+      "farmingGrowthBlockLimit",
+      "farmingGrowthBlockLimit():(uint256)",
+      []
     );
 
-    return result[0].toBoolean();
+    return result[0].toBigInt();
   }
 
-  try_farmingActive(
-    param0: Address,
-    param1: Address
-  ): ethereum.CallResult<boolean> {
+  try_farmingGrowthBlockLimit(): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
-      "farmingActive",
-      "farmingActive(address,address):(bool)",
-      [ethereum.Value.fromAddress(param0), ethereum.Value.fromAddress(param1)]
+      "farmingGrowthBlockLimit",
+      "farmingGrowthBlockLimit():(uint256)",
+      []
     );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBoolean());
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
   getGlobalReward(
@@ -498,6 +713,40 @@ export class UnipilotFarm extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
+  governance(): Address {
+    let result = super.call("governance", "governance():(address)", []);
+
+    return result[0].toAddress();
+  }
+
+  try_governance(): ethereum.CallResult<Address> {
+    let result = super.tryCall("governance", "governance():(address)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
+  isFarmingActive(): boolean {
+    let result = super.call("isFarmingActive", "isFarmingActive():(bool)", []);
+
+    return result[0].toBoolean();
+  }
+
+  try_isFarmingActive(): ethereum.CallResult<boolean> {
+    let result = super.tryCall(
+      "isFarmingActive",
+      "isFarmingActive():(bool)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
   nftStatus(tokenId: BigInt): boolean {
     let result = super.call("nftStatus", "nftStatus(uint256):(bool)", [
       ethereum.Value.fromUnsignedBigInt(tokenId)
@@ -563,24 +812,23 @@ export class UnipilotFarm extends ethereum.SmartContract {
   poolInfo(param0: Address): UnipilotFarm__poolInfoResult {
     let result = super.call(
       "poolInfo",
-      "poolInfo(address):(address,uint256,uint256,uint256,uint256,uint256,uint256,address,bool,uint256,uint256,uint256,uint256)",
+      "poolInfo(address):(uint256,uint256,uint256,uint256,uint256,uint256,address,bool,uint256,uint256,uint256,uint256)",
       [ethereum.Value.fromAddress(param0)]
     );
 
     return new UnipilotFarm__poolInfoResult(
-      result[0].toAddress(),
+      result[0].toBigInt(),
       result[1].toBigInt(),
       result[2].toBigInt(),
       result[3].toBigInt(),
       result[4].toBigInt(),
       result[5].toBigInt(),
-      result[6].toBigInt(),
-      result[7].toAddress(),
-      result[8].toBoolean(),
+      result[6].toAddress(),
+      result[7].toBoolean(),
+      result[8].toBigInt(),
       result[9].toBigInt(),
       result[10].toBigInt(),
-      result[11].toBigInt(),
-      result[12].toBigInt()
+      result[11].toBigInt()
     );
   }
 
@@ -589,7 +837,7 @@ export class UnipilotFarm extends ethereum.SmartContract {
   ): ethereum.CallResult<UnipilotFarm__poolInfoResult> {
     let result = super.tryCall(
       "poolInfo",
-      "poolInfo(address):(address,uint256,uint256,uint256,uint256,uint256,uint256,address,bool,uint256,uint256,uint256,uint256)",
+      "poolInfo(address):(uint256,uint256,uint256,uint256,uint256,uint256,address,bool,uint256,uint256,uint256,uint256)",
       [ethereum.Value.fromAddress(param0)]
     );
     if (result.reverted) {
@@ -598,19 +846,18 @@ export class UnipilotFarm extends ethereum.SmartContract {
     let value = result.value;
     return ethereum.CallResult.fromValue(
       new UnipilotFarm__poolInfoResult(
-        value[0].toAddress(),
+        value[0].toBigInt(),
         value[1].toBigInt(),
         value[2].toBigInt(),
         value[3].toBigInt(),
         value[4].toBigInt(),
         value[5].toBigInt(),
-        value[6].toBigInt(),
-        value[7].toAddress(),
-        value[8].toBoolean(),
+        value[6].toAddress(),
+        value[7].toBoolean(),
+        value[8].toBigInt(),
         value[9].toBigInt(),
         value[10].toBigInt(),
-        value[11].toBigInt(),
-        value[12].toBigInt()
+        value[11].toBigInt()
       )
     );
   }
@@ -636,51 +883,21 @@ export class UnipilotFarm extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
-  toggleActiveAlt(poolAddress: Address, altTokenAddress: Address): boolean {
+  toggleActiveAlt(poolAddress: Address): boolean {
     let result = super.call(
       "toggleActiveAlt",
-      "toggleActiveAlt(address,address):(bool)",
-      [
-        ethereum.Value.fromAddress(poolAddress),
-        ethereum.Value.fromAddress(altTokenAddress)
-      ]
+      "toggleActiveAlt(address):(bool)",
+      [ethereum.Value.fromAddress(poolAddress)]
     );
 
     return result[0].toBoolean();
   }
 
-  try_toggleActiveAlt(
-    poolAddress: Address,
-    altTokenAddress: Address
-  ): ethereum.CallResult<boolean> {
+  try_toggleActiveAlt(poolAddress: Address): ethereum.CallResult<boolean> {
     let result = super.tryCall(
       "toggleActiveAlt",
-      "toggleActiveAlt(address,address):(bool)",
-      [
-        ethereum.Value.fromAddress(poolAddress),
-        ethereum.Value.fromAddress(altTokenAddress)
-      ]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBoolean());
-  }
-
-  toggleBooster(tokenId: BigInt): boolean {
-    let result = super.call("toggleBooster", "toggleBooster(uint256):(bool)", [
-      ethereum.Value.fromUnsignedBigInt(tokenId)
-    ]);
-
-    return result[0].toBoolean();
-  }
-
-  try_toggleBooster(tokenId: BigInt): ethereum.CallResult<boolean> {
-    let result = super.tryCall(
-      "toggleBooster",
-      "toggleBooster(uint256):(bool)",
-      [ethereum.Value.fromUnsignedBigInt(tokenId)]
+      "toggleActiveAlt(address):(bool)",
+      [ethereum.Value.fromAddress(poolAddress)]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -796,6 +1013,38 @@ export class UnipilotFarm extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
+  updateAltToken(poolAddress: Address, altTokenAddress: Address): Address {
+    let result = super.call(
+      "updateAltToken",
+      "updateAltToken(address,address):(address)",
+      [
+        ethereum.Value.fromAddress(poolAddress),
+        ethereum.Value.fromAddress(altTokenAddress)
+      ]
+    );
+
+    return result[0].toAddress();
+  }
+
+  try_updateAltToken(
+    poolAddress: Address,
+    altTokenAddress: Address
+  ): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "updateAltToken",
+      "updateAltToken(address,address):(address)",
+      [
+        ethereum.Value.fromAddress(poolAddress),
+        ethereum.Value.fromAddress(altTokenAddress)
+      ]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
   updateMultiplier(poolAddress: Address, value: BigInt): BigInt {
     let result = super.call(
       "updateMultiplier",
@@ -863,7 +1112,7 @@ export class UnipilotFarm extends ethereum.SmartContract {
   userInfo(param0: BigInt): UnipilotFarm__userInfoResult {
     let result = super.call(
       "userInfo",
-      "userInfo(uint256):(uint256,address,uint256,address,uint256,uint256,bool)",
+      "userInfo(uint256):(uint256,address,uint256,address,uint256,uint256)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
 
@@ -873,8 +1122,7 @@ export class UnipilotFarm extends ethereum.SmartContract {
       result[2].toBigInt(),
       result[3].toAddress(),
       result[4].toBigInt(),
-      result[5].toBigInt(),
-      result[6].toBoolean()
+      result[5].toBigInt()
     );
   }
 
@@ -883,7 +1131,7 @@ export class UnipilotFarm extends ethereum.SmartContract {
   ): ethereum.CallResult<UnipilotFarm__userInfoResult> {
     let result = super.tryCall(
       "userInfo",
-      "userInfo(uint256):(uint256,address,uint256,address,uint256,uint256,bool)",
+      "userInfo(uint256):(uint256,address,uint256,address,uint256,uint256)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
     if (result.reverted) {
@@ -897,8 +1145,7 @@ export class UnipilotFarm extends ethereum.SmartContract {
         value[2].toBigInt(),
         value[3].toAddress(),
         value[4].toBigInt(),
-        value[5].toBigInt(),
-        value[6].toBoolean()
+        value[5].toBigInt()
       )
     );
   }
@@ -942,31 +1189,18 @@ export class UnipilotFarm extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  withdrawNFT(poolAddress: Address, tokenId: BigInt): boolean {
-    let result = super.call(
-      "withdrawNFT",
-      "withdrawNFT(address,uint256):(bool)",
-      [
-        ethereum.Value.fromAddress(poolAddress),
-        ethereum.Value.fromUnsignedBigInt(tokenId)
-      ]
-    );
+  withdrawNFT(tokenId: BigInt): boolean {
+    let result = super.call("withdrawNFT", "withdrawNFT(uint256):(bool)", [
+      ethereum.Value.fromUnsignedBigInt(tokenId)
+    ]);
 
     return result[0].toBoolean();
   }
 
-  try_withdrawNFT(
-    poolAddress: Address,
-    tokenId: BigInt
-  ): ethereum.CallResult<boolean> {
-    let result = super.tryCall(
-      "withdrawNFT",
-      "withdrawNFT(address,uint256):(bool)",
-      [
-        ethereum.Value.fromAddress(poolAddress),
-        ethereum.Value.fromUnsignedBigInt(tokenId)
-      ]
-    );
+  try_withdrawNFT(tokenId: BigInt): ethereum.CallResult<boolean> {
+    let result = super.tryCall("withdrawNFT", "withdrawNFT(uint256):(bool)", [
+      ethereum.Value.fromUnsignedBigInt(tokenId)
+    ]);
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -974,30 +1208,21 @@ export class UnipilotFarm extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
-  withdrawReward(poolAddress: Address, tokenId: BigInt): boolean {
+  withdrawReward(tokenId: BigInt): boolean {
     let result = super.call(
       "withdrawReward",
-      "withdrawReward(address,uint256):(bool)",
-      [
-        ethereum.Value.fromAddress(poolAddress),
-        ethereum.Value.fromUnsignedBigInt(tokenId)
-      ]
+      "withdrawReward(uint256):(bool)",
+      [ethereum.Value.fromUnsignedBigInt(tokenId)]
     );
 
     return result[0].toBoolean();
   }
 
-  try_withdrawReward(
-    poolAddress: Address,
-    tokenId: BigInt
-  ): ethereum.CallResult<boolean> {
+  try_withdrawReward(tokenId: BigInt): ethereum.CallResult<boolean> {
     let result = super.tryCall(
       "withdrawReward",
-      "withdrawReward(address,uint256):(bool)",
-      [
-        ethereum.Value.fromAddress(poolAddress),
-        ethereum.Value.fromUnsignedBigInt(tokenId)
-      ]
+      "withdrawReward(uint256):(bool)",
+      [ethereum.Value.fromUnsignedBigInt(tokenId)]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -1027,6 +1252,18 @@ export class ConstructorCall__Inputs {
   get pools(): Array<Address> {
     return this._call.inputValues[0].value.toAddressArray();
   }
+
+  get _ULM(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+
+  get _UNIPILOT(): Address {
+    return this._call.inputValues[2].value.toAddress();
+  }
+
+  get _PILOT_TOKEN(): Address {
+    return this._call.inputValues[3].value.toAddress();
+  }
 }
 
 export class ConstructorCall__Outputs {
@@ -1054,12 +1291,8 @@ export class DepositNFTCall__Inputs {
     this._call = call;
   }
 
-  get poolAddress(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
   get tokenId(): BigInt {
-    return this._call.inputValues[1].value.toBigInt();
+    return this._call.inputValues[0].value.toBigInt();
   }
 }
 
@@ -1105,62 +1338,70 @@ export class EmergencyNFTWithdrawCall__Outputs {
   }
 }
 
-export class InsertPoolCall extends ethereum.Call {
-  get inputs(): InsertPoolCall__Inputs {
-    return new InsertPoolCall__Inputs(this);
+export class InitializerCall extends ethereum.Call {
+  get inputs(): InitializerCall__Inputs {
+    return new InitializerCall__Inputs(this);
   }
 
-  get outputs(): InsertPoolCall__Outputs {
-    return new InsertPoolCall__Outputs(this);
+  get outputs(): InitializerCall__Outputs {
+    return new InitializerCall__Outputs(this);
   }
 }
 
-export class InsertPoolCall__Inputs {
-  _call: InsertPoolCall;
+export class InitializerCall__Inputs {
+  _call: InitializerCall;
 
-  constructor(call: InsertPoolCall) {
+  constructor(call: InitializerCall) {
     this._call = call;
   }
 
-  get poolAddress(): Address {
-    return this._call.inputValues[0].value.toAddress();
+  get pools(): Array<Address> {
+    return this._call.inputValues[0].value.toAddressArray();
   }
 }
 
-export class InsertPoolCall__Outputs {
-  _call: InsertPoolCall;
+export class InitializerCall__Outputs {
+  _call: InitializerCall;
 
-  constructor(call: InsertPoolCall) {
+  constructor(call: InitializerCall) {
     this._call = call;
   }
 }
 
-export class MigrateFundDataCall extends ethereum.Call {
-  get inputs(): MigrateFundDataCall__Inputs {
-    return new MigrateFundDataCall__Inputs(this);
+export class MigrateFundsCall extends ethereum.Call {
+  get inputs(): MigrateFundsCall__Inputs {
+    return new MigrateFundsCall__Inputs(this);
   }
 
-  get outputs(): MigrateFundDataCall__Outputs {
-    return new MigrateFundDataCall__Outputs(this);
+  get outputs(): MigrateFundsCall__Outputs {
+    return new MigrateFundsCall__Outputs(this);
   }
 }
 
-export class MigrateFundDataCall__Inputs {
-  _call: MigrateFundDataCall;
+export class MigrateFundsCall__Inputs {
+  _call: MigrateFundsCall;
 
-  constructor(call: MigrateFundDataCall) {
+  constructor(call: MigrateFundsCall) {
     this._call = call;
   }
 
   get newContract(): Address {
     return this._call.inputValues[0].value.toAddress();
   }
+
+  get tokenAddress(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+
+  get amount(): BigInt {
+    return this._call.inputValues[2].value.toBigInt();
+  }
 }
 
-export class MigrateFundDataCall__Outputs {
-  _call: MigrateFundDataCall;
+export class MigrateFundsCall__Outputs {
+  _call: MigrateFundsCall;
 
-  constructor(call: MigrateFundDataCall) {
+  constructor(call: MigrateFundsCall) {
     this._call = call;
   }
 }
@@ -1231,10 +1472,6 @@ export class ToggleActiveAltCall__Inputs {
   get poolAddress(): Address {
     return this._call.inputValues[0].value.toAddress();
   }
-
-  get altTokenAddress(): Address {
-    return this._call.inputValues[1].value.toAddress();
-  }
 }
 
 export class ToggleActiveAltCall__Outputs {
@@ -1244,41 +1481,7 @@ export class ToggleActiveAltCall__Outputs {
     this._call = call;
   }
 
-  get currentStatus(): boolean {
-    return this._call.outputValues[0].value.toBoolean();
-  }
-}
-
-export class ToggleBoosterCall extends ethereum.Call {
-  get inputs(): ToggleBoosterCall__Inputs {
-    return new ToggleBoosterCall__Inputs(this);
-  }
-
-  get outputs(): ToggleBoosterCall__Outputs {
-    return new ToggleBoosterCall__Outputs(this);
-  }
-}
-
-export class ToggleBoosterCall__Inputs {
-  _call: ToggleBoosterCall;
-
-  constructor(call: ToggleBoosterCall) {
-    this._call = call;
-  }
-
-  get tokenId(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-}
-
-export class ToggleBoosterCall__Outputs {
-  _call: ToggleBoosterCall;
-
-  constructor(call: ToggleBoosterCall) {
-    this._call = call;
-  }
-
-  get currentStatus(): boolean {
+  get value0(): boolean {
     return this._call.outputValues[0].value.toBoolean();
   }
 }
@@ -1359,6 +1562,74 @@ export class UpdateAltPerBlockCall__Outputs {
   }
 }
 
+export class UpdateAltTokenCall extends ethereum.Call {
+  get inputs(): UpdateAltTokenCall__Inputs {
+    return new UpdateAltTokenCall__Inputs(this);
+  }
+
+  get outputs(): UpdateAltTokenCall__Outputs {
+    return new UpdateAltTokenCall__Outputs(this);
+  }
+}
+
+export class UpdateAltTokenCall__Inputs {
+  _call: UpdateAltTokenCall;
+
+  constructor(call: UpdateAltTokenCall) {
+    this._call = call;
+  }
+
+  get poolAddress(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get altTokenAddress(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+}
+
+export class UpdateAltTokenCall__Outputs {
+  _call: UpdateAltTokenCall;
+
+  constructor(call: UpdateAltTokenCall) {
+    this._call = call;
+  }
+
+  get value0(): Address {
+    return this._call.outputValues[0].value.toAddress();
+  }
+}
+
+export class UpdateFarmingLimitCall extends ethereum.Call {
+  get inputs(): UpdateFarmingLimitCall__Inputs {
+    return new UpdateFarmingLimitCall__Inputs(this);
+  }
+
+  get outputs(): UpdateFarmingLimitCall__Outputs {
+    return new UpdateFarmingLimitCall__Outputs(this);
+  }
+}
+
+export class UpdateFarmingLimitCall__Inputs {
+  _call: UpdateFarmingLimitCall;
+
+  constructor(call: UpdateFarmingLimitCall) {
+    this._call = call;
+  }
+
+  get blockNumber(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+}
+
+export class UpdateFarmingLimitCall__Outputs {
+  _call: UpdateFarmingLimitCall;
+
+  constructor(call: UpdateFarmingLimitCall) {
+    this._call = call;
+  }
+}
+
 export class UpdateMultiplierCall extends ethereum.Call {
   get inputs(): UpdateMultiplierCall__Inputs {
     return new UpdateMultiplierCall__Inputs(this);
@@ -1435,6 +1706,36 @@ export class UpdatePilotPerBlockCall__Outputs {
   }
 }
 
+export class UpdateULMCall extends ethereum.Call {
+  get inputs(): UpdateULMCall__Inputs {
+    return new UpdateULMCall__Inputs(this);
+  }
+
+  get outputs(): UpdateULMCall__Outputs {
+    return new UpdateULMCall__Outputs(this);
+  }
+}
+
+export class UpdateULMCall__Inputs {
+  _call: UpdateULMCall;
+
+  constructor(call: UpdateULMCall) {
+    this._call = call;
+  }
+
+  get _ULM(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class UpdateULMCall__Outputs {
+  _call: UpdateULMCall;
+
+  constructor(call: UpdateULMCall) {
+    this._call = call;
+  }
+}
+
 export class WithdrawNFTCall extends ethereum.Call {
   get inputs(): WithdrawNFTCall__Inputs {
     return new WithdrawNFTCall__Inputs(this);
@@ -1452,12 +1753,8 @@ export class WithdrawNFTCall__Inputs {
     this._call = call;
   }
 
-  get poolAddress(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
   get tokenId(): BigInt {
-    return this._call.inputValues[1].value.toBigInt();
+    return this._call.inputValues[0].value.toBigInt();
   }
 }
 
@@ -1490,12 +1787,8 @@ export class WithdrawRewardCall__Inputs {
     this._call = call;
   }
 
-  get poolAddress(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
   get tokenId(): BigInt {
-    return this._call.inputValues[1].value.toBigInt();
+    return this._call.inputValues[0].value.toBigInt();
   }
 }
 

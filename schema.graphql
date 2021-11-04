@@ -1,7 +1,6 @@
 type Protocol @entity {
   id: ID!
   tvl: BigDecimal!
-  rewardDistributed: BigInt!
   totalNftLocked: BigInt!
   reward: BigInt!
 }

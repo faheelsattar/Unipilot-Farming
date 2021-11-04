@@ -18,7 +18,6 @@ export class Protocol extends Entity {
     this.set("id", Value.fromString(id));
 
     this.set("tvl", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("rewardDistributed", Value.fromBigInt(BigInt.zero()));
     this.set("totalNftLocked", Value.fromBigInt(BigInt.zero()));
     this.set("reward", Value.fromBigInt(BigInt.zero()));
   }
@@ -56,15 +55,6 @@ export class Protocol extends Entity {
 
   set tvl(value: BigDecimal) {
     this.set("tvl", Value.fromBigDecimal(value));
-  }
-
-  get rewardDistributed(): BigInt {
-    let value = this.get("rewardDistributed");
-    return value!.toBigInt();
-  }
-
-  set rewardDistributed(value: BigInt) {
-    this.set("rewardDistributed", Value.fromBigInt(value));
   }
 
   get totalNftLocked(): BigInt {
